@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { Providers } from "@/components/providers";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -40,7 +42,9 @@ export default function RootLayout({
         <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
         <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </head>
-      <body className={`${inter.variable} font-sans antialiased bg-background`}>{children}</body>
+      <body className={`${inter.variable} font-sans antialiased bg-background`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

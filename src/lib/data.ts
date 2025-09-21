@@ -276,7 +276,7 @@ export const skills: SkillCategory[] = [
 export const experiences: Experience[] = [
   {
     id: 0,
-    img: "https://res.cloudinary.com/dzw5pskk1/image/upload/v1715753954/applicationLogo_h62wsh.jpg",
+    img: "https://res.cloudinary.com/dzw5pskk1/image/upload/v1755003498/SQUARE_AFRICA_FOUNDATION_INVERTED_PAYOFF3_zmvvv7.png",
     role: "DevOps Engineer | Software Engineer",
     company: "E4Impact Entrepreneurship Center, Kenya",
     date: "Feb 2024 - Present",
@@ -335,7 +335,7 @@ export const experiences: Experience[] = [
   },
   {
     id: 3,
-    img: "https://res.cloudinary.com/dzw5pskk1/image/upload/v1705581205/nitrogen_w6ryxr.png",
+    img: "https://res.cloudinary.com/dzw5pskk1/image/upload/e_background_removal/f_png/v1705581205/nitrogen_w6ryxr.png",
     role: "Front-End Developer",
     company: "Nitrogen Technologies",
     date: "Jan 2022 - May 2022",
@@ -571,8 +571,8 @@ export const certificates: Certificate[] = [
     issuer: "Amazon Web Services",
     date: "Issued Apr 4, 2025",
     image:
-      "https://images.credly.com/size/680x680/images/8d67bbf4-128b-4141-b5f1-1bc61bbfbaa6/image.png",
-    url: "https://www.cloudskillsboost.google/public_profiles/your-profile",
+      "https://res.cloudinary.com/dzw5pskk1/image/upload/v1758433987/aws-cloud-101_l417fg.png",
+    url: "https://www.credly.com/badges/3e52bc8d-0391-45b8-8a46-4c95107dc626",
   },
   {
     id: 7,
@@ -589,7 +589,7 @@ export const certificates: Certificate[] = [
     issuer: "Amazon Web Services",
     date: "Issued Apr 6, 2025",
     image:
-      "https://images.credly.com/images/5bf37709-4b69-4cdc-9edc-af7b3370d427/image.png",
+      "https://res.cloudinary.com/dzw5pskk1/image/upload/v1758433742/aws-educate_blsngg.png",
     url: "https://www.credly.com/badges/c1bba7ba-25d7-427b-9c60-49b4d41ac1fa/public_url",
   },
 ];

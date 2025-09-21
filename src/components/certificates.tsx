@@ -25,13 +25,13 @@ export function CertificatesSection() {
           >
             <Card className="h-full border-border/50 bg-background/70 backdrop-blur">
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                <div className="relative h-14 w-14 overflow-visible">
+                <div className="flex h-16 w-16 items-center justify-center rounded-md bg-background/60">
                   <Image
                     src={item.image}
                     alt={item.title}
-                    fill
-                    className="object-contain"
-                    sizes="56px"
+                    width={60}
+                    height={60}
+                    className="max-h-14 max-w-full object-contain"
                   />
                 </div>
                 <div className="space-y-1">

@@ -9,11 +9,10 @@ import { motion } from "framer-motion";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({
+  show: {
     opacity: 1,
     y: 0,
-    transition: { delay: 0.08 * i, duration: 0.5, ease: "easeOut" },
-  }),
+  },
 };
 
 export function ExperienceSection() {
@@ -31,17 +30,17 @@ export function ExperienceSection() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
-            custom={index}
+            transition={{ delay: 0.08 * index, duration: 0.5 }}
           >
             <Card className="h-full border-border/60 bg-background/60 backdrop-blur">
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                <div className="relative h-14 w-14 overflow-hidden rounded-full border border-border/60 bg-background">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-border/60 bg-background/80">
                   <Image
                     src={item.img}
                     alt={item.company}
-                    fill
-                    className="object-cover"
-                    sizes="56px"
+                    width={48}
+                    height={48}
+                    className="h-10 w-10 object-contain"
                   />
                 </div>
                 <div>

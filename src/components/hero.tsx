@@ -222,9 +222,9 @@ export function Hero() {
 
   const handleCalendlyClick = (event: React.MouseEvent) => {
     createRipple(event);
-    // @ts-ignore
+    // @ts-expect-error - Calendly is loaded externally
     if (typeof window !== 'undefined' && window.Calendly) {
-      // @ts-ignore
+      // @ts-expect-error - Calendly API not typed
       window.Calendly.initPopupWidget({
         url: 'https://calendly.com/kylerobins/30min',
         parentElement: document.body,
@@ -341,7 +341,7 @@ export function Hero() {
             DevOps Engineer · X · Software Engineer
           </span>
           <motion.h1
-            className="text-[40px] font-semibold leading-tight text-slate-100 sm:text-5xl md:text-6xl"
+            className="text-[40px] font-semibold leading-tight text-foreground sm:text-5xl md:text-6xl"
             animate={{
               y: mousePosition.y * -10,
             }}
@@ -363,11 +363,11 @@ export function Hero() {
               {bio.name}
             </motion.span>
           </motion.h1>
-          <div className="text-2xl font-medium text-slate-300 sm:text-3xl">
-            <span className="text-slate-200/80">I build</span>{" "}
+          <div className="text-2xl font-medium text-muted-foreground sm:text-3xl">
+            <span className="text-muted-foreground">I build</span>{" "}
             <span className="text-primary">resilient systems</span>
             <br className="hidden md:block" />
-            <span className="text-slate-200/80">as a</span>{" "}
+            <span className="text-muted-foreground">as a</span>{" "}
             <AnimatePresence mode="wait">
               <motion.span
                 key={role}
@@ -381,7 +381,7 @@ export function Hero() {
               </motion.span>
             </AnimatePresence>
           </div>
-          <p className="max-w-2xl text-base text-slate-300/80 sm:text-lg">
+          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
             {bio.description}
           </p>
           <div className="flex flex-wrap items-center gap-3">
@@ -502,7 +502,7 @@ export function Hero() {
               </Button>
             </motion.div>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground dark:text-slate-400">
             <span className="inline-flex items-center gap-2">
               <MapPin className="h-4 w-4" /> {bio.location}
             </span>
@@ -533,7 +533,7 @@ export function Hero() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
-                  <div className="text-xs text-slate-400 font-sans">portfolio.tsx</div>
+                  <div className="text-xs text-muted-foreground dark:text-slate-400 font-sans">portfolio.tsx</div>
                 </div>
 
                 <div className="flex-1 overflow-hidden">
