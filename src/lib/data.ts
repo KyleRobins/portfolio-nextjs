@@ -397,6 +397,94 @@ export const education: Education[] = [
 
 export const projects: Project[] = [
   {
+    id: 10,
+    title: "ILO Youth Leadership Lab",
+    date: "2026",
+    description:
+      "Innovation challenge platform for the ILO and E4Impact supporting youth-led organisations in Turkana and Garissa with grants, bootcamps, and institutional support for decent work and livelihoods.",
+    image: "/projects/ilo-youth-leadership-lab.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://ilo.e4impactafrica.org",
+  },
+  {
+    id: 11,
+    title: "Safi Jiko",
+    date: "2026",
+    description:
+      "Acceleration programme site for women entrepreneurs building clean cooking businesses across Meru, Makueni, and Kitui, run by E4Impact and Joule.",
+    image: "/projects/safi-jiko-clean-cooking.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://cleancooking.e4impactkenya.org",
+  },
+  {
+    id: 12,
+    title: "ACT Coffee Programme",
+    date: "2026",
+    description:
+      "Executive education platform strengthening innovation and entrepreneurship across Kenya's coffee value chain, from production through international marketing.",
+    image: "/projects/act-coffee-programme.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://act.e4impactkenya.org",
+  },
+  {
+    id: 13,
+    title: "AWARE Programme",
+    date: "2026",
+    description:
+      "Business acceleration site for women-led agri-food enterprises in Uasin Gishu and Trans Nzoia, backed by the Embassy of Ireland and TradeMark Africa.",
+    image: "/projects/aware-programme.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://aware.e4impactkenya.org",
+  },
+  {
+    id: 14,
+    title: "CASHA Challenge Fund",
+    date: "2026",
+    description:
+      "Grant fund platform financing youth-led livestock and agri-food enterprises across 15 counties in Kenya's arid and semi-arid lands.",
+    image: "/projects/casha-challenge-fund.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://casha.e4impactkenya.org",
+  },
+  {
+    id: 15,
+    title: "AUDA-NEPAD HGSA",
+    date: "2025",
+    description:
+      "Home-Grown Solutions Agribusiness Accelerator site for a COMESA regional initiative supporting growth-stage agribusinesses across Africa's agricultural value chain.",
+    image: "/projects/auda-nepad-hgsa.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://auda-nepad.e4impactkenya.org",
+  },
+  {
+    id: 16,
+    title: "AFR100",
+    date: "2025",
+    description:
+      "Landscape restoration platform supporting enterprise growth across the DRC, Kenya, Madagascar, Malawi, Tanzania, and Togo.",
+    image: "/projects/afr100-restoration.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://afr100.e4impactkenya.org",
+  },
+  {
+    id: 17,
+    title: "IPEME Agroprocessing Incubator",
+    date: "2025",
+    description:
+      "Bilingual incubation programme site for agroprocessing SMEs in Manica, Mozambique, delivered with IPEME, UNIDO, and E4Impact.",
+    image: "/projects/ipeme-agroprocessing.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+    category: "web app",
+    webapp: "https://ipemeinc.com",
+  },
+  {
     id: 9,
     title: "Senke",
     date: "Active",
