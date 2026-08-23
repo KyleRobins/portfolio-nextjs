@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Calendar, GitGraph, Github, Linkedin, Mail, MapPin, Mic, Trophy } from "lucide-react";
 import Link from "next/link";
 
@@ -183,6 +183,18 @@ const achievements = [
   },
 ];
 
+const heroContainerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const heroItemVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
 function useRoleRotation(roles: string[], delay = 2200) {
   const memoRoles = useMemo(() => roles, [roles]);
   const [index, setIndex] = useState(0);
@@ -336,13 +348,23 @@ export function Hero() {
         }}
       />
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-20 sm:px-6 lg:flex-row lg:items-center lg:gap-16 lg:px-8">
-        <div className="flex flex-1 flex-col gap-6">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1 text-xs font-medium tracking-[0.3em] uppercase text-primary/80 backdrop-blur">
+        <motion.div
+          className="flex flex-1 flex-col gap-6"
+          initial="hidden"
+          animate="show"
+          variants={heroContainerVariants}
+        >
+          <motion.span
+            variants={heroItemVariants}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1 text-xs font-medium tracking-[0.3em] uppercase text-primary/80 backdrop-blur"
+          >
             DevOps Engineer · X · Software Engineer
-          </span>
+          </motion.span>
           <motion.h1
             className="text-[40px] font-semibold leading-tight text-foreground sm:text-5xl md:text-6xl"
+            initial={{ opacity: 0, y: 18 }}
             animate={{
+              opacity: 1,
               y: mousePosition.y * -10,
             }}
             transition={{
@@ -363,7 +385,7 @@ export function Hero() {
               {bio.name}
             </motion.span>
           </motion.h1>
-          <div className="text-2xl font-medium text-muted-foreground sm:text-3xl">
+          <motion.div variants={heroItemVariants} className="text-2xl font-medium text-muted-foreground sm:text-3xl">
             <span className="text-muted-foreground">I build</span>{" "}
             <span className="text-primary">resilient systems</span>
             <br className="hidden md:block" />
@@ -380,11 +402,11 @@ export function Hero() {
                 {role}
               </motion.span>
             </AnimatePresence>
-          </div>
-          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
+          </motion.div>
+          <motion.p variants={heroItemVariants} className="max-w-2xl text-base text-muted-foreground sm:text-lg">
             {bio.description}
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
+          </motion.p>
+          <motion.div variants={heroItemVariants} className="flex flex-wrap items-center gap-3">
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
@@ -501,16 +523,16 @@ export function Hero() {
                 </Link>
               </Button>
             </motion.div>
-          </div>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground dark:text-slate-400">
+          </motion.div>
+          <motion.div variants={heroItemVariants} className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground dark:text-slate-400">
             <span className="inline-flex items-center gap-2">
               <MapPin className="h-4 w-4" /> {bio.location}
             </span>
             <span className="inline-flex items-center gap-2">
               <Mail className="h-4 w-4" /> {bio.email}
             </span>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         <div className="hidden lg:block w-full lg:w-5/12 relative">
           <div className="relative h-[400px] md:h-[500px] w-full perspective-1000">
