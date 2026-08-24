@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SquareTerminal } from "lucide-react";
 
 const monoFontStyle = {
   fontFamily: "'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace",
@@ -12,7 +13,9 @@ const colors = {
   property: "#9CDCFE",
   string: "#CE9178",
   default: "#D4D4D4",
-  comment: "#6A9955",
+  muted: "#7A8B99",
+  success: "#89D185",
+  info: "#4FC1FF",
 };
 
 type Token = { text: string; color: string };
@@ -23,8 +26,20 @@ const id = (text: string): Token => ({ text, color: colors.variable });
 const prop = (text: string): Token => ({ text, color: colors.property });
 const str = (text: string): Token => ({ text, color: colors.string });
 const plain = (text: string): Token => ({ text, color: colors.default });
+const muted = (text: string): Token => ({ text, color: colors.muted });
+const ok = (text: string): Token => ({ text, color: colors.success });
+const info = (text: string): Token => ({ text, color: colors.info });
 
-const snippets: { fileName: string; lines: Line[] }[] = [
+type Snippet = {
+  fileName: string;
+  lines: Line[];
+  contextIcon: string;
+  contextLabel: Token[];
+  command: Line;
+  output: Line[];
+};
+
+const snippets: Snippet[] = [
   {
     fileName: "devops.ts",
     lines: [
@@ -40,6 +55,14 @@ const snippets: { fileName: string; lines: Line[] }[] = [
       [kw("    return"), plain(" "), kw("await"), id(" provisionCluster"), plain("();")],
       [plain("  },")],
       [plain("};")],
+    ],
+    contextIcon: "⎈",
+    contextLabel: [muted("minikube"), plain("(default)")],
+    command: [plain("kubectl apply -f "), str("k8s/deployment.yaml")],
+    output: [
+      [ok("deployment.apps/portfolio-api"), muted(" created")],
+      [ok("service/portfolio-api"), muted(" exposed")],
+      [info("✓"), plain(" rollout complete "), muted("— 3/3 pods Running")],
     ],
   },
   {
@@ -58,6 +81,14 @@ const snippets: { fileName: string; lines: Line[] }[] = [
       [plain("  },")],
       [plain("};")],
     ],
+    contextIcon: "▲",
+    contextLabel: [muted("~/portfolio-nextjs"), plain(" (main)")],
+    command: [plain("pnpm build "), muted("&&"), plain(" vercel --prod")],
+    output: [
+      [ok("✓"), plain(" Compiled successfully "), muted("in 4.2s")],
+      [ok("✓"), plain(" Static pages generated "), muted("(7/7)")],
+      [info("✓"), plain(" Deployed to production "), muted("— kylerobins.com")],
+    ],
   },
 ];
 
@@ -65,8 +96,13 @@ const MAX_LINES = Math.max(...snippets.map((s) => s.lines.length));
 const TYPE_DELAY_MIN = 18;
 const TYPE_DELAY_MAX = 46;
 const NEWLINE_DELAY = 180;
-const HOLD_DELAY = 2600;
-const CLEAR_DELAY = 450;
+const CODE_HOLD_DELAY = 550;
+const RUN_DELAY = 550;
+const OUTPUT_LINE_DELAY = 220;
+const OUTPUT_HOLD_DELAY = 2400;
+const CLEAR_DELAY = 500;
+
+type Phase = "typing-code" | "holding-code" | "typing-cmd" | "running" | "output" | "holding-output" | "clearing";
 
 function lineLength(line: Line) {
   return line.reduce((sum, token) => sum + token.text.length, 0);
@@ -100,12 +136,16 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+const PANEL_TABS = ["Problems", "Output", "Debug Console", "Terminal", "Ports"];
+
 export function LiveCodeCard() {
   const reducedMotion = usePrefersReducedMotion();
   const [snippetIdx, setSnippetIdx] = useState(0);
   const [lineIdx, setLineIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
-  const [phase, setPhase] = useState<"typing" | "holding" | "clearing">("typing");
+  const [cmdCharIdx, setCmdCharIdx] = useState(0);
+  const [outputLineIdx, setOutputLineIdx] = useState(0);
+  const [phase, setPhase] = useState<Phase>("typing-code");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -118,7 +158,7 @@ export function LiveCodeCard() {
       timeoutRef.current = setTimeout(fn, delay);
     };
 
-    if (phase === "typing") {
+    if (phase === "typing-code") {
       const total = lineLength(currentLine);
       if (charIdx < total) {
         const burst = Math.random() < 0.18 ? 2 : 1;
@@ -129,31 +169,54 @@ export function LiveCodeCard() {
           setCharIdx(0);
         }, NEWLINE_DELAY);
       } else {
-        schedule(() => setPhase("holding"), 120);
+        schedule(() => setPhase("holding-code"), 120);
       }
-    } else if (phase === "holding") {
-      schedule(() => setPhase("clearing"), HOLD_DELAY);
+    } else if (phase === "holding-code") {
+      schedule(() => setPhase("typing-cmd"), CODE_HOLD_DELAY);
+    } else if (phase === "typing-cmd") {
+      const total = lineLength(snippet.command);
+      if (cmdCharIdx < total) {
+        schedule(() => setCmdCharIdx((c) => c + 1), TYPE_DELAY_MIN + Math.random() * (TYPE_DELAY_MAX - TYPE_DELAY_MIN));
+      } else {
+        schedule(() => setPhase("running"), 200);
+      }
+    } else if (phase === "running") {
+      schedule(() => setPhase("output"), RUN_DELAY);
+    } else if (phase === "output") {
+      if (outputLineIdx < snippet.output.length) {
+        schedule(() => setOutputLineIdx((l) => l + 1), OUTPUT_LINE_DELAY);
+      } else {
+        schedule(() => setPhase("holding-output"), 150);
+      }
+    } else if (phase === "holding-output") {
+      schedule(() => setPhase("clearing"), OUTPUT_HOLD_DELAY);
     } else {
       schedule(() => {
         setSnippetIdx((s) => (s + 1) % snippets.length);
         setLineIdx(0);
         setCharIdx(0);
-        setPhase("typing");
+        setCmdCharIdx(0);
+        setOutputLineIdx(0);
+        setPhase("typing-code");
       }, CLEAR_DELAY);
     }
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [phase, charIdx, lineIdx, snippetIdx, reducedMotion]);
+  }, [phase, charIdx, lineIdx, cmdCharIdx, outputLineIdx, snippetIdx, reducedMotion]);
 
   const snippet = snippets[snippetIdx];
   const finalSnippet = snippets[0];
   const isClearing = phase === "clearing" && !reducedMotion;
+  const codeDone = reducedMotion || (phase !== "typing-code" && !isClearing);
+  const terminalActive = reducedMotion || (!isClearing && phase !== "typing-code" && phase !== "holding-code");
+  const commandDone = reducedMotion || (terminalActive && phase !== "typing-cmd");
+  const outputVisible = reducedMotion || phase === "output" || phase === "holding-output";
 
   return (
-    <div className="absolute inset-0 p-6 flex flex-col">
-      <div className="flex items-center justify-between mb-4">
+    <div className="absolute inset-0 p-5 flex flex-col">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex space-x-1.5">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -164,16 +227,16 @@ export function LiveCodeCard() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-hidden">
         <div className="space-y-0" style={monoFontStyle}>
           {Array.from({ length: MAX_LINES }).map((_, i) => {
             const activeLines = reducedMotion ? finalSnippet.lines : snippet.lines;
-            const isPastLine = !isClearing && (i < lineIdx || reducedMotion);
-            const isActiveLine = !isClearing && i === lineIdx && !reducedMotion;
+            const isPastLine = !isClearing && (i < lineIdx || codeDone);
+            const isActiveLine = !isClearing && i === lineIdx && !codeDone;
             const sourceLine = activeLines[i];
 
             if (!sourceLine) {
-              return <div key={i} className="h-[21px]" aria-hidden />;
+              return <div key={i} className="h-[19px]" aria-hidden />;
             }
 
             const tokens = isPastLine ? sourceLine : isActiveLine ? sliceLine(sourceLine, charIdx) : null;
@@ -181,19 +244,19 @@ export function LiveCodeCard() {
             return (
               <div key={i} className="flex items-start">
                 <span
-                  className="w-8 text-[#6A9955] text-sm pr-2 flex-shrink-0 select-none opacity-60"
+                  className="w-7 text-[#6A9955] text-[13px] pr-2 flex-shrink-0 select-none opacity-60"
                   style={monoFontStyle}
                 >
                   {tokens ? String(i + 1).padStart(2, "0") : ""}
                 </span>
-                <div className="text-sm leading-relaxed flex-1" style={monoFontStyle}>
+                <div className="text-[13px] leading-[19px] flex-1" style={monoFontStyle}>
                   {tokens?.map((token, ti) => (
                     <span key={ti} style={{ color: token.color }}>
                       {token.text}
                     </span>
                   ))}
                   {isActiveLine ? (
-                    <span className="cursor-blink inline-block w-[2px] h-[14px] -mb-[2px] ml-[1px] bg-[#AEAFAD]" />
+                    <span className="cursor-blink inline-block w-[2px] h-[13px] -mb-[1px] ml-[1px] bg-[#AEAFAD]" />
                   ) : null}
                 </div>
               </div>
@@ -202,12 +265,75 @@ export function LiveCodeCard() {
         </div>
       </div>
 
-      <div className="mt-4 flex justify-between items-center text-xs text-slate-400 font-sans">
-        <div className="flex items-center font-sans">
-          <div className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div>
-          <span>Online and coding</span>
+      <div className="flex-shrink-0 border-t border-white/10 mt-2 pt-2 font-sans">
+        <div className="flex items-center gap-4 px-1 mb-2 overflow-hidden">
+          {PANEL_TABS.map((tab) => (
+            <span
+              key={tab}
+              className={
+                tab === "Terminal"
+                  ? "text-[11px] font-medium text-primary border-b-2 border-primary pb-1 whitespace-nowrap"
+                  : "text-[11px] text-slate-500 pb-1 whitespace-nowrap"
+              }
+            >
+              {tab}
+            </span>
+          ))}
         </div>
-        <div>Last commit: Today</div>
+
+        <div className="rounded-lg bg-black/20 px-3 py-2" style={monoFontStyle}>
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mb-1">
+            <SquareTerminal className="h-3 w-3 text-[#4FC1FF]" />
+            <span className="text-[#4FC1FF]">kyle-mbp</span>
+            <span className="text-slate-600">{"//"}</span>
+            <span className="text-[#DCDCAA]">kylerobins</span>
+            <span className="text-slate-600">via</span>
+            <span>{(reducedMotion ? finalSnippet : snippet).contextIcon}</span>
+            {(reducedMotion ? finalSnippet : snippet).contextLabel.map((token, i) => (
+              <span key={i} style={{ color: token.color }}>
+                {token.text}
+              </span>
+            ))}
+          </div>
+
+          <div className="text-[13px] leading-[19px]">
+            <span className="text-primary mr-1.5">❯</span>
+            {commandDone
+              ? snippet.command.map((token, i) => (
+                  <span key={i} style={{ color: token.color }}>
+                    {token.text}
+                  </span>
+                ))
+              : sliceLine(snippet.command, cmdCharIdx).map((token, i) => (
+                  <span key={i} style={{ color: token.color }}>
+                    {token.text}
+                  </span>
+                ))}
+            {phase === "typing-cmd" && !reducedMotion ? (
+              <span className="cursor-blink inline-block w-[2px] h-[13px] -mb-[1px] ml-[1px] bg-[#AEAFAD]" />
+            ) : null}
+          </div>
+
+          {outputVisible ? (
+            <div className="mt-1 space-y-0.5">
+              {snippet.output.slice(0, reducedMotion ? snippet.output.length : outputLineIdx).map((line, li) => (
+                <div key={li} className="text-[12px] leading-[17px]">
+                  {line.map((token, ti) => (
+                    <span key={ti} style={{ color: token.color }}>
+                      {token.text}
+                    </span>
+                  ))}
+                </div>
+              ))}
+              {phase === "holding-output" || reducedMotion ? (
+                <div className="text-[13px] leading-[19px] pt-0.5">
+                  <span className="text-primary mr-1.5">❯</span>
+                  {!reducedMotion ? <span className="cursor-blink inline-block w-[2px] h-[13px] -mb-[1px] bg-[#AEAFAD]" /> : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

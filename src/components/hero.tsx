@@ -392,7 +392,7 @@ export function Hero() {
         </motion.div>
 
         <div className="hidden lg:block w-full lg:w-5/12 relative">
-          <div className="relative h-[400px] md:h-[500px] w-full perspective-1000">
+          <div className="relative h-[480px] md:h-[580px] w-full perspective-1000">
             <motion.div
               className="absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-br from-[#112821] to-[#0b1a15] border border-[#3b6652]/40 shadow-[0_28px_70px_rgba(9,23,18,0.65)] font-sans"
               initial={{ opacity: 0, rotateY: 10, rotateX: -10, y: 20 }}
