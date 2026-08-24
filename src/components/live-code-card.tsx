@@ -92,6 +92,7 @@ const snippets: Snippet[] = [
   },
 ];
 
+const MAX_LINES = Math.max(...snippets.map((s) => s.lines.length));
 const TYPE_DELAY_MIN = 18;
 const TYPE_DELAY_MAX = 46;
 const NEWLINE_DELAY = 180;
@@ -226,17 +227,18 @@ export function LiveCodeCard() {
         </div>
       </div>
 
-      <div className="flex-shrink-0 overflow-hidden">
+      <div className="flex-shrink-0 overflow-hidden" style={{ height: MAX_LINES * 19 }}>
         <div className="space-y-0" style={monoFontStyle}>
-          {(() => {
+          {Array.from({ length: MAX_LINES }).map((_, i) => {
             const activeLines = reducedMotion ? finalSnippet.lines : snippet.lines;
-            const visibleCount = isClearing ? 0 : codeDone ? activeLines.length : lineIdx + 1;
-            return Array.from({ length: visibleCount });
-          })().map((_, i) => {
-            const activeLines = reducedMotion ? finalSnippet.lines : snippet.lines;
-            const isPastLine = i < lineIdx || codeDone;
-            const isActiveLine = i === lineIdx && !codeDone;
+            const isPastLine = !isClearing && (i < lineIdx || codeDone);
+            const isActiveLine = !isClearing && i === lineIdx && !codeDone;
             const sourceLine = activeLines[i];
+
+            if (!sourceLine) {
+              return <div key={i} className="h-[19px]" aria-hidden />;
+            }
+
             const tokens = isPastLine ? sourceLine : isActiveLine ? sliceLine(sourceLine, charIdx) : null;
 
             return (
