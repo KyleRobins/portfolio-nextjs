@@ -35,7 +35,7 @@ export function AboutSection() {
                 <li>Dev enablement & documentation</li>
               </ul>
             </div>
-            <div className="rounded-2xl border border-[#3b6652]/40 bg-[#1f3b31]/50 p-5">
+            <div className="rounded-2xl border border-border/40 bg-secondary/60 p-5">
               <p className="text-xs uppercase tracking-[0.35em] text-primary/80">
                 Communities
               </p>
