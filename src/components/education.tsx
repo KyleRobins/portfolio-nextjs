@@ -19,12 +19,18 @@ export function EducationSection() {
             key={item.id}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -8, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            whileTap={{ y: -3, transition: { type: "spring", stiffness: 400, damping: 25 } }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.08 * index, duration: 0.5, ease: "easeOut" }}
           >
             <Card className="h-full border-border/60 bg-background/70 backdrop-blur">
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                <div className="relative h-14 w-14 overflow-hidden rounded-full border border-border/60 bg-background">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: -3 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="relative h-14 w-14 overflow-hidden rounded-full border border-border/60 bg-background"
+                >
                   <Image
                     src={item.img}
                     alt={item.school}
@@ -32,7 +38,7 @@ export function EducationSection() {
                     className="object-cover"
                     sizes="56px"
                   />
-                </div>
+                </motion.div>
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
                     {item.date}
@@ -53,9 +59,10 @@ export function EducationSection() {
                   <Link
                     href={item.doc}
                     target="_blank"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                    className="group inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
                   >
-                    View Credential <ExternalLink className="h-4 w-4" />
+                    View Credential
+                    <ExternalLink className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 ) : null}
               </CardContent>

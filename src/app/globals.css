@@ -179,6 +179,19 @@
   animation: grid-drift 40s linear infinite;
 }
 
+/* Elevation used by Card and other card-like surfaces. Plain box-shadow
+   (not Tailwind's shadow-[var(...)] arbitrary value) so the hover swap
+   isn't routed through Tailwind's shared --tw-shadow composition var. */
+.card-elevate {
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+
+.card-elevate:hover {
+  border-color: color-mix(in oklab, var(--primary) 35%, transparent);
+  box-shadow: var(--shadow-card-hover);
+}
+
 @keyframes grid-drift {
   from {
     background-position: 0 0;

@@ -16,16 +16,21 @@ export function AboutSection() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="rounded-3xl border border-border/40 bg-background/70 p-8 backdrop-blur"
+          className="card-elevate rounded-3xl border border-border/40 bg-background/70 p-8 backdrop-blur"
         >
           <h3 className="text-2xl font-semibold text-foreground">What I do</h3>
           <p className="mt-4 text-sm text-muted-foreground">
             I architect automated cloud environments, build scalable web products, and champion developer experience. From Terraform blueprints to TypeScript design systems, I help teams ship faster with confidence.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-primary/40 bg-primary/10 p-5">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="rounded-2xl border border-primary/40 bg-primary/10 p-5"
+            >
               <p className="text-xs uppercase tracking-[0.35em] text-primary/90">
                 Focus Areas
               </p>
@@ -34,8 +39,12 @@ export function AboutSection() {
                 <li>Full-stack product delivery</li>
                 <li>Dev enablement & documentation</li>
               </ul>
-            </div>
-            <div className="rounded-2xl border border-border/40 bg-secondary/60 p-5">
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="rounded-2xl border border-border/40 bg-secondary/60 p-5"
+            >
               <p className="text-xs uppercase tracking-[0.35em] text-primary/80">
                 Communities
               </p>
@@ -44,7 +53,7 @@ export function AboutSection() {
                 <li>Technical writing at blog.kylerobins.com</li>
                 <li>Mentorship & DevRel partnerships</li>
               </ul>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
         <motion.div

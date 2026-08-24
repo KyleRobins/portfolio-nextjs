@@ -18,6 +18,7 @@ export function SkillsSection() {
             key={category.title}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: index * 0.08, duration: 0.5, ease: "easeOut" }}
           >
@@ -31,9 +32,12 @@ export function SkillsSection() {
               <CardContent>
                 <div className="grid grid-cols-3 gap-4 sm:grid-cols-4">
                   {category.skills.map((skill) => (
-                    <div
+                    <motion.div
                       key={skill.name}
-                      className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-background/60 p-3 text-center transition hover:border-primary/40 hover:bg-primary/5"
+                      whileHover={{ y: -4, scale: 1.06 }}
+                      whileTap={{ scale: 0.94 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-background/60 p-3 text-center transition-colors hover:border-primary/40 hover:bg-primary/5"
                     >
                       <div className="relative h-10 w-10">
                         <Image
@@ -47,7 +51,7 @@ export function SkillsSection() {
                       <span className="text-xs font-medium text-muted-foreground group-hover:text-primary">
                         {skill.name}
                       </span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </CardContent>

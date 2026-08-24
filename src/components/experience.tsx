@@ -29,12 +29,18 @@ export function ExperienceSection() {
             variants={cardVariants}
             initial="hidden"
             whileInView="show"
+            whileHover={{ y: -8, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            whileTap={{ y: -3, transition: { type: "spring", stiffness: 400, damping: 25 } }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.08 * index, duration: 0.5 }}
           >
             <Card className="h-full border-border/60 bg-background/60 backdrop-blur">
               <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-border/60 bg-background/80">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 3 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-border/60 bg-background/80"
+                >
                   <Image
                     src={item.img}
                     alt={item.company}
@@ -42,7 +48,7 @@ export function ExperienceSection() {
                     height={48}
                     className="h-10 w-10 object-contain"
                   />
-                </div>
+                </motion.div>
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
                     {item.date}
