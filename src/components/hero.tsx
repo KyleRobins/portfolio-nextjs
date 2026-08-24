@@ -437,7 +437,7 @@ export function Hero() {
             />
           </div>
 
-          <div className="absolute inset-0 pointer-events-none hidden md:block">
+          <div className="absolute inset-0 z-20 pointer-events-none hidden md:block">
             {achievements.map((achievement, index) => {
               const positionMap: Record<number, string> = {
                 0: "-top-20 left-1/2 -translate-x-1/2",
