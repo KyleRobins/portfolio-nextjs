@@ -2,9 +2,17 @@ import type { MetadataRoute } from "next";
 
 const baseUrl = "https://kylerobins.com";
 
+const pages = [
+  "about",
+  "experience",
+  "education",
+  "skills",
+  "projects",
+  "certificates",
+  "contact",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  // URL fragments (#section) aren't distinct documents to crawlers, so a
-  // single-page site only ever has one indexable entry: the homepage.
   return [
     {
       url: baseUrl,
@@ -12,5 +20,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
+    ...pages.map((page) => ({
+      url: `${baseUrl}/${page}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
   ];
 }

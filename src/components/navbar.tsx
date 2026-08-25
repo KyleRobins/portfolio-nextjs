@@ -5,28 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Github, Linkedin, Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
 const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Education", href: "#education" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Certificates", href: "#certificates" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", hash: "about" },
+  { label: "Experience", hash: "experience" },
+  { label: "Education", hash: "education" },
+  { label: "Skills", hash: "skills" },
+  { label: "Projects", hash: "projects" },
+  { label: "Certificates", hash: "certificates" },
+  { label: "Contact", hash: "contact" },
 ];
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const onHomepage = pathname === "/";
 
   const NavLinks = () => (
     <nav className="flex w-full flex-col items-start gap-8 text-lg md:w-auto md:flex-row md:items-center md:gap-8 md:text-base">
       {navItems.map((item) => (
         <Link
-          key={item.href}
-          href={item.href}
+          key={item.hash}
+          href={onHomepage ? `#${item.hash}` : `/${item.hash}`}
           onClick={() => setOpen(false)}
           className="group relative w-full text-left font-medium text-muted-foreground transition-colors hover:text-foreground md:w-auto"
         >
@@ -40,7 +43,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 backdrop-blur bg-background/70">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="#hero" className="flex items-center gap-2">
+        <Link href={onHomepage ? "#hero" : "/"} className="flex items-center gap-2">
           <motion.div
             whileHover={{ scale: 1.08, rotate: -4 }}
             whileTap={{ scale: 0.95 }}
