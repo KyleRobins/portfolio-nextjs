@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/providers";
+import { StructuredData } from "@/components/structured-data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,13 +11,49 @@ const inter = Inter({
   display: "swap",
 });
 
+const title = "Kyle Robins · DevOps & Full Stack Engineer in Nairobi, Kenya";
+const description =
+  "Kyle Robins is a DevOps and full-stack engineer in Nairobi, Kenya building resilient cloud infrastructure with Terraform, Kubernetes, and AWS, and delightful products with Next.js and TypeScript.";
+
 export const metadata: Metadata = {
-  title: "Kyle Robins · DevOps & Full Stack Engineer",
-  description:
-    "Portfolio for Kyle Robins, a DevOps and full-stack engineer crafting resilient infrastructure and delightful digital experiences.",
+  title,
+  description,
   metadataBase: new URL("https://kylerobins.com"),
+  keywords: [
+    "Kyle Robins",
+    "DevOps Engineer",
+    "Site Reliability Engineer",
+    "Software Engineer",
+    "Full-Stack Developer",
+    "DevOps Engineer Nairobi",
+    "DevOps Engineer Kenya",
+    "Terraform",
+    "Kubernetes",
+    "Docker",
+    "AWS",
+    "CI/CD",
+    "Next.js Developer",
+    "TypeScript Developer",
+  ],
+  authors: [{ name: "Kyle Robins", url: "https://kylerobins.com" }],
+  creator: "Kyle Robins",
+  publisher: "Kyle Robins",
+  category: "technology",
+  alternates: {
+    canonical: "https://kylerobins.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "Kyle Robins · DevOps & Full Stack Engineer",
+    title,
     description:
       "Explore work across DevOps, cloud architecture, and full-stack product development by Kyle Robins.",
     url: "https://kylerobins.com",
@@ -26,6 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title,
+    description,
     site: "@_KyleRobins",
     creator: "@_KyleRobins",
   },
@@ -43,6 +82,7 @@ export default function RootLayout({
         <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-background`}>
+        <StructuredData />
         <Providers>{children}</Providers>
       </body>
     </html>
