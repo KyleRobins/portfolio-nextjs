@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { Calendar, GitGraph, Github, Linkedin, Mail, MapPin, Mic, Trophy } from "lucide-react";
+import { Calendar, Check, Copy, GitGraph, Github, Linkedin, Mail, MapPin, Mic, Trophy } from "lucide-react";
 import Link from "next/link";
 
 import { bio } from "@/lib/data";
@@ -74,6 +74,17 @@ export function Hero() {
   const [activeAchievement, setActiveAchievement] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [emailCopied, setEmailCopied] = useState(false);
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(bio.email);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 1800);
+    } catch {
+      // Clipboard access denied or unavailable; nothing to fall back to.
+    }
+  };
 
   const createRipple = (event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -385,9 +396,40 @@ export function Hero() {
             <span className="inline-flex items-center gap-2">
               <MapPin className="h-4 w-4" /> {bio.location}
             </span>
-            <span className="inline-flex items-center gap-2">
-              <Mail className="h-4 w-4" /> {bio.email}
-            </span>
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              aria-label="Copy email address"
+              title="Copy email address"
+              className="group inline-flex items-center gap-2 transition-colors hover:text-primary"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {emailCopied ? (
+                  <motion.span
+                    key="check"
+                    initial={{ opacity: 0, scale: 0.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.6 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-primary"
+                  >
+                    <Check className="h-4 w-4" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="mail"
+                    initial={{ opacity: 0, scale: 0.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.6 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Mail className="h-4 w-4" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+              <span>{emailCopied ? "Copied!" : bio.email}</span>
+              <Copy className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-60" />
+            </button>
           </motion.div>
         </motion.div>
 
